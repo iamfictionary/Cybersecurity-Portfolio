@@ -36,45 +36,66 @@ def analyze_logins(filename):
                 continue
 
             total_records += 1
-            print(f"{timestamp} | {ip_address} | {result}")
-
-            if result == "SUCCESS":
-                successful_logins[ip_address] += 1
-                continue
-
-            failed_attempts[ip_address] += 1
             failures = recent_failures[ip_address]
 
             while failures and timestamp - failures[0] > TIME_WINDOW:
                 failures.popleft()
 
-            failures.append(timestamp)
-            count = len(failures)
+            print(f"{timestamp} | {ip_address} | {result}")
 
-            if count == ALERT_THRESHOLD:
-                alerts.append({
-                    "ip": ip_address,
-                    "severity": "MEDIUM",
-                    "time": timestamp,
-                    "count": count,
-                    "recommendation": (
-                        "Review authentication logs and investigate "
-                        "the source IP for related suspicious activity."
-                    ),
-                })
+            if result == "SUCCESS":
+                successful_logins[ip_address] += 1
 
-            elif count == HIGH_SEVERITY_THRESHOLD:
-                alerts.append({
-                    "ip": ip_address,
-                    "severity": "HIGH",
-                    "time": timestamp,
-                    "count": count,
-                    "recommendation": (
-                        "Prioritize investigation, check for successful "
-                        "logins, and consider containment if malicious "
-                        "activity is confirmed."
-                    ),
-                })
+                if len(failures) >= ALERT_THRESHOLD:
+                    alerts.append({
+                        "ip": ip_address,
+                        "severity": "HIGH",
+                        "time": timestamp,
+                        "count": len(failures),
+                        "type": "Successful login after repeated failures",
+                        "recommendation": (
+                            "Investigate the account and source IP, review "
+                            "nearby authentication events, and verify whether "
+                            "the login was legitimate."
+                        ),
+                    })
+
+                    print(
+                        f"  ALERT: Successful login from {ip_address} "
+                        "after repeated failed attempts!"
+                    )
+
+            elif result == "FAILED":
+                failed_attempts[ip_address] += 1
+                failures.append(timestamp)
+                count = len(failures)
+
+                if count == ALERT_THRESHOLD:
+                    alerts.append({
+                        "ip": ip_address,
+                        "severity": "MEDIUM",
+                        "time": timestamp,
+                        "count": count,
+                        "type": "Repeated failed logins",
+                        "recommendation": (
+                            "Review authentication logs and investigate "
+                            "the source IP for related suspicious activity."
+                        ),
+                    })
+
+                elif count == HIGH_SEVERITY_THRESHOLD:
+                    alerts.append({
+                        "ip": ip_address,
+                        "severity": "HIGH",
+                        "time": timestamp,
+                        "count": count,
+                        "type": "Repeated failed logins - high threshold",
+                        "recommendation": (
+                            "Prioritize investigation, check for successful "
+                            "logins, and consider containment if malicious "
+                            "activity is confirmed."
+                        ),
+                    })
 
     print(f"\nTotal login records: {total_records}")
 
@@ -92,8 +113,8 @@ def analyze_logins(filename):
     else:
         for alert in alerts:
             print(
-                f"[{alert['severity']}] {alert['ip']} - "
-                f"{alert['count']} failed logins within 5 minutes"
+                f"[{alert['severity']}] {alert['type']} - "
+                f"{alert['ip']} at {alert['time']}"
             )
             print(f"  Recommendation: {alert['recommendation']}")
 
@@ -121,9 +142,10 @@ def analyze_logins(filename):
     else:
         for alert in alerts:
             report.extend([
+                f"Alert type: {alert['type']}",
                 f"Severity: {alert['severity']}",
                 f"Source IP: {alert['ip']}",
-                f"Failed logins within 5 minutes: {alert['count']}",
+                f"Related failed logins: {alert['count']}",
                 f"Detection time: {alert['time']}",
                 f"Recommendation: {alert['recommendation']}",
                 "-" * 40,
@@ -136,4 +158,5 @@ def analyze_logins(filename):
 
 
 if __name__ == "__main__":
-    analyze_logins("login.log")
+
+       analyze_logins("login.log") 
