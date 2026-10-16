@@ -2,6 +2,7 @@ from collections import Counter, defaultdict, deque
 from datetime import datetime, timedelta
 
 ALERT_THRESHOLD = 3
+HIGH_SEVERITY_THRESHOLD = 5
 TIME_WINDOW = timedelta(minutes=5)
 
 
@@ -39,24 +40,62 @@ def analyze_logins(filename):
 
             if result == "SUCCESS":
                 successful_logins[ip_address] += 1
+                continue
 
-            elif result == "FAILED":
-                failed_attempts[ip_address] += 1
-                failures = recent_failures[ip_address]
+            failed_attempts[ip_address] += 1
+            failures = recent_failures[ip_address]
 
-                while failures and timestamp - failures[0] > TIME_WINDOW:
-                    failures.popleft()
+            while failures and timestamp - failures[0] > TIME_WINDOW:
+                failures.popleft()
 
-                failures.append(timestamp)
+            failures.append(timestamp)
+            count = len(failures)
 
-                if len(failures) == ALERT_THRESHOLD:
-                    alert = (
-                        f"ALERT: {ip_address} had at least "
-                        f"{ALERT_THRESHOLD} failed logins within 5 minutes "
-                        f"(latest: {timestamp})"
-                    )
-                    alerts.append(alert)
-                    print(f"  {alert}")
+            if count == ALERT_THRESHOLD:
+                alerts.append({
+                    "ip": ip_address,
+                    "severity": "MEDIUM",
+                    "time": timestamp,
+                    "count": count,
+                    "recommendation": (
+                        "Review authentication logs and investigate "
+                        "the source IP for related suspicious activity."
+                    ),
+                })
+
+            elif count == HIGH_SEVERITY_THRESHOLD:
+                alerts.append({
+                    "ip": ip_address,
+                    "severity": "HIGH",
+                    "time": timestamp,
+                    "count": count,
+                    "recommendation": (
+                        "Prioritize investigation, check for successful "
+                        "logins, and consider containment if malicious "
+                        "activity is confirmed."
+                    ),
+                })
+
+    print(f"\nTotal login records: {total_records}")
+
+    print("\nSuccessful logins by IP address:")
+    for ip, count in successful_logins.items():
+        print(f"{ip}: {count} successful logins")
+
+    print("\nFailed login attempts by IP address:")
+    for ip, count in failed_attempts.items():
+        print(f"{ip}: {count} failed attempts")
+
+    print("\nSecurity alerts:")
+    if not alerts:
+        print("No security alerts detected.")
+    else:
+        for alert in alerts:
+            print(
+                f"[{alert['severity']}] {alert['ip']} - "
+                f"{alert['count']} failed logins within 5 minutes"
+            )
+            print(f"  Recommendation: {alert['recommendation']}")
 
     report = [
         "CYBERSECURITY LOGIN ANALYSIS REPORT",
@@ -64,7 +103,7 @@ def analyze_logins(filename):
         f"Report generated: {datetime.now()}",
         f"Total login records: {total_records}",
         "",
-        "SUCCESSFUL LOGINS BY IP:"
+        "SUCCESSFUL LOGINS BY IP:",
     ]
 
     for ip, count in successful_logins.items():
@@ -77,22 +116,21 @@ def analyze_logins(filename):
 
     report.extend(["", "SECURITY ALERTS:"])
 
-    if alerts:
-        report.extend(alerts)
-    else:
+    if not alerts:
         report.append("No security alerts detected.")
+    else:
+        for alert in alerts:
+            report.extend([
+                f"Severity: {alert['severity']}",
+                f"Source IP: {alert['ip']}",
+                f"Failed logins within 5 minutes: {alert['count']}",
+                f"Detection time: {alert['time']}",
+                f"Recommendation: {alert['recommendation']}",
+                "-" * 40,
+            ])
 
     with open("security_report.txt", "w") as report_file:
         report_file.write("\n".join(report) + "\n")
-
-    print(f"\nTotal login records: {total_records}")
-    print("\nSuccessful logins by IP address:")
-    for ip, count in successful_logins.items():
-        print(f"{ip}: {count} successful logins")
-
-    print("\nFailed login attempts by IP address:")
-    for ip, count in failed_attempts.items():
-        print(f"{ip}: {count} failed attempts")
 
     print("\nSecurity report saved to security_report.txt")
 

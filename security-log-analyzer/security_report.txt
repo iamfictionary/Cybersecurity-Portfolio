@@ -1,6 +1,6 @@
 CYBERSECURITY LOGIN ANALYSIS REPORT
 ========================================
-Report generated: 2026-10-16 13:21:08.088383
+Report generated: 2026-10-16 13:32:07.001683
 Total login records: 7
 
 SUCCESSFUL LOGINS BY IP:
@@ -11,4 +11,9 @@ FAILED LOGIN ATTEMPTS BY IP:
 192.168.1.30: 1 failed attempts
 
 SECURITY ALERTS:
-ALERT: 192.168.1.10 had at least 3 failed logins within 5 minutes (latest: 2026-10-15 09:00:30)
+Severity: MEDIUM
+Source IP: 192.168.1.10
+Failed logins within 5 minutes: 3
+Detection time: 2026-10-15 09:00:30
+Recommendation: Review authentication logs and investigate the source IP for related suspicious activity.
+----------------------------------------
