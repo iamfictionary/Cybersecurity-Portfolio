@@ -166,7 +166,7 @@ def analyze_logins(filename):
     print("\nSecurity report saved to security_report.txt")
     print("Structured alerts saved to security_alerts.json")
     print(f"Total security alerts: {len(alerts)}")
-
+    return alerts
 
 if __name__ == "__main__":
     analyze_logins("login.log")
