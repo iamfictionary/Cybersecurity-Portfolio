@@ -6,6 +6,10 @@
         "count": 3,
         "time": "2026-10-15T09:00:30",
         "recommendation": "Investigate the source IP and review authentication logs.",
+        "mitre_attack": {
+            "technique_id": "T1110",
+            "technique_name": "Brute Force"
+        },
         "alert_id": "ALERT-0001"
     },
     {
@@ -15,6 +19,10 @@
         "count": 4,
         "time": "2026-10-15T09:01:30",
         "recommendation": "Verify whether the login was legitimate and investigate possible account compromise.",
+        "mitre_attack": {
+            "technique_id": "T1110",
+            "technique_name": "Brute Force"
+        },
         "alert_id": "ALERT-0002"
     }
 ]

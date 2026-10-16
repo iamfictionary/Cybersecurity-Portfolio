@@ -60,6 +60,18 @@ def analyze_logins(filename):
                             "Investigate the source IP and review "
                             "authentication logs."
                         ),
+
+                         "recommendation": (
+    "Investigate the source IP and review authentication logs."
+),
+"mitre_attack": {
+    "technique_id": "T1110",
+    "technique_name": "Brute Force"
+},
+
+
+
+
                     })
 
                 elif count == HIGH_SEVERITY_THRESHOLD:
@@ -89,6 +101,10 @@ def analyze_logins(filename):
                             "Verify whether the login was legitimate "
                             "and investigate possible account compromise."
                         ),
+                         "mitre_attack": {
+                             "technique_id": "T1110",
+                             "technique_name": "Brute Force"
+                    },
                     })
 
     print(f"\nTotal login records: {total_records}")
