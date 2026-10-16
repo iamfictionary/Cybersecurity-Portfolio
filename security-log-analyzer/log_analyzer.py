@@ -1,9 +1,11 @@
 from collections import Counter, defaultdict, deque
 from datetime import datetime, timedelta
+import json
 
+
+TIME_WINDOW = timedelta(minutes=5)
 ALERT_THRESHOLD = 3
 HIGH_SEVERITY_THRESHOLD = 5
-TIME_WINDOW = timedelta(minutes=5)
 
 
 def analyze_logins(filename):
@@ -15,7 +17,7 @@ def analyze_logins(filename):
 
     print("\n=== CYBERSECURITY LOG ANALYZER ===")
 
-    with open(filename, "r") as log_file:
+    with open(filename, "r", encoding="utf-8") as log_file:
         for line in log_file:
             parts = line.strip().split()
 
@@ -29,7 +31,6 @@ def analyze_logins(filename):
                     f"{date} {time}", "%Y-%m-%d %H:%M:%S"
                 )
             except ValueError:
-                print(f"Skipping invalid timestamp: {line.strip()}")
                 continue
 
             if result not in ("SUCCESS", "FAILED"):
@@ -43,99 +44,80 @@ def analyze_logins(filename):
 
             print(f"{timestamp} | {ip_address} | {result}")
 
-            if result == "SUCCESS":
-                successful_logins[ip_address] += 1
-
-                if len(failures) >= ALERT_THRESHOLD:
-                    alerts.append({
-                        "ip": ip_address,
-                        "severity": "HIGH",
-                        "time": timestamp,
-                        "count": len(failures),
-                        "type": "Successful login after repeated failures",
-                        "recommendation": (
-                            "Investigate the account and source IP, review "
-                            "nearby authentication events, and verify whether "
-                            "the login was legitimate."
-                        ),
-                    })
-
-                    print(
-                        f"  ALERT: Successful login from {ip_address} "
-                        "after repeated failed attempts!"
-                    )
-
-            elif result == "FAILED":
+            if result == "FAILED":
                 failed_attempts[ip_address] += 1
                 failures.append(timestamp)
                 count = len(failures)
 
                 if count == ALERT_THRESHOLD:
                     alerts.append({
-                        "ip": ip_address,
+                        "type": "Repeated Failed Logins",
                         "severity": "MEDIUM",
-                        "time": timestamp,
+                        "ip": ip_address,
                         "count": count,
-                        "type": "Repeated failed logins",
+                        "time": timestamp,
                         "recommendation": (
-                            "Review authentication logs and investigate "
-                            "the source IP for related suspicious activity."
+                            "Investigate the source IP and review "
+                            "authentication logs."
                         ),
                     })
 
                 elif count == HIGH_SEVERITY_THRESHOLD:
                     alerts.append({
-                        "ip": ip_address,
+                        "type": "Possible Brute-Force Attack",
                         "severity": "HIGH",
-                        "time": timestamp,
+                        "ip": ip_address,
                         "count": count,
-                        "type": "Repeated failed logins - high threshold",
+                        "time": timestamp,
                         "recommendation": (
-                            "Prioritize investigation, check for successful "
-                            "logins, and consider containment if malicious "
-                            "activity is confirmed."
+                            "Investigate immediately and consider "
+                            "blocking the source IP."
+                        ),
+                    })
+
+            elif result == "SUCCESS":
+                successful_logins[ip_address] += 1
+
+                if len(failures) >= ALERT_THRESHOLD:
+                    alerts.append({
+                        "type": "Successful Login After Repeated Failures",
+                        "severity": "HIGH",
+                        "ip": ip_address,
+                        "count": len(failures),
+                        "time": timestamp,
+                        "recommendation": (
+                            "Verify whether the login was legitimate "
+                            "and investigate possible account compromise."
                         ),
                     })
 
     print(f"\nTotal login records: {total_records}")
-
-    print("\nSuccessful logins by IP address:")
-    for ip, count in successful_logins.items():
-        print(f"{ip}: {count} successful logins")
-
-    print("\nFailed login attempts by IP address:")
-    for ip, count in failed_attempts.items():
-        print(f"{ip}: {count} failed attempts")
-
-    print("\nSecurity alerts:")
-    if not alerts:
-        print("No security alerts detected.")
-    else:
-        for alert in alerts:
-            print(
-                f"[{alert['severity']}] {alert['type']} - "
-                f"{alert['ip']} at {alert['time']}"
-            )
-            print(f"  Recommendation: {alert['recommendation']}")
+    print("Successful logins:", dict(successful_logins))
+    print("Failed login attempts:", dict(failed_attempts))
 
     report = [
-        "CYBERSECURITY LOGIN ANALYSIS REPORT",
+        "CYBERSECURITY LOG ANALYSIS REPORT",
         "=" * 40,
-        f"Report generated: {datetime.now()}",
         f"Total login records: {total_records}",
         "",
-        "SUCCESSFUL LOGINS BY IP:",
+        "SUCCESSFUL LOGINS:",
     ]
 
-    for ip, count in successful_logins.items():
-        report.append(f"{ip}: {count} successful logins")
+    if successful_logins:
+        for ip, count in successful_logins.items():
+            report.append(f"{ip}: {count}")
+    else:
+        report.append("None")
 
-    report.extend(["", "FAILED LOGIN ATTEMPTS BY IP:"])
+    report.extend(["", "FAILED LOGIN ATTEMPTS:"])
 
-    for ip, count in failed_attempts.items():
-        report.append(f"{ip}: {count} failed attempts")
+    if failed_attempts:
+        for ip, count in failed_attempts.items():
+            report.append(f"{ip}: {count}")
+    else:
+        report.append("None")
 
-    report.extend(["", "SECURITY ALERTS:"])
+    report.extend(["", "SECURITY ALERTS:", "=" * 40])
 
     if not alerts:
         report.append("No security alerts detected.")
@@ -151,12 +133,24 @@ def analyze_logins(filename):
                 "-" * 40,
             ])
 
-    with open("security_report.txt", "w") as report_file:
+    with open("security_report.txt", "w", encoding="utf-8") as report_file:
         report_file.write("\n".join(report) + "\n")
 
+    json_alerts = []
+
+    for index, alert in enumerate(alerts, start=1):
+        json_alert = alert.copy()
+        json_alert["alert_id"] = f"ALERT-{index:04d}"
+        json_alert["time"] = alert["time"].isoformat()
+        json_alerts.append(json_alert)
+
+    with open("security_alerts.json", "w", encoding="utf-8") as json_file:
+        json.dump(json_alerts, json_file, indent=4)
+
     print("\nSecurity report saved to security_report.txt")
+    print("Structured alerts saved to security_alerts.json")
+    print(f"Total security alerts: {len(alerts)}")
 
 
 if __name__ == "__main__":
-
-       analyze_logins("login.log") 
+    analyze_logins("login.log")

@@ -1,0 +1,20 @@
+[
+    {
+        "type": "Repeated Failed Logins",
+        "severity": "MEDIUM",
+        "ip": "192.168.1.10",
+        "count": 3,
+        "time": "2026-10-15T09:00:30",
+        "recommendation": "Investigate the source IP and review authentication logs.",
+        "alert_id": "ALERT-0001"
+    },
+    {
+        "type": "Successful Login After Repeated Failures",
+        "severity": "HIGH",
+        "ip": "192.168.1.10",
+        "count": 4,
+        "time": "2026-10-15T09:01:30",
+        "recommendation": "Verify whether the login was legitimate and investigate possible account compromise.",
+        "alert_id": "ALERT-0002"
+    }
+]

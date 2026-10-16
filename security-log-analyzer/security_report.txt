@@ -1,28 +1,28 @@
-CYBERSECURITY LOGIN ANALYSIS REPORT
+CYBERSECURITY LOG ANALYSIS REPORT
 ========================================
-Report generated: 2026-10-16 13:45:13.261721
 Total login records: 8
 
-SUCCESSFUL LOGINS BY IP:
-192.168.1.25: 2 successful logins
-192.168.1.10: 1 successful logins
+SUCCESSFUL LOGINS:
+192.168.1.25: 2
+192.168.1.10: 1
 
-FAILED LOGIN ATTEMPTS BY IP:
-192.168.1.10: 4 failed attempts
-192.168.1.30: 1 failed attempts
+FAILED LOGIN ATTEMPTS:
+192.168.1.10: 4
+192.168.1.30: 1
 
 SECURITY ALERTS:
-Alert type: Repeated failed logins
+========================================
+Alert type: Repeated Failed Logins
 Severity: MEDIUM
 Source IP: 192.168.1.10
 Related failed logins: 3
 Detection time: 2026-10-15 09:00:30
-Recommendation: Review authentication logs and investigate the source IP for related suspicious activity.
+Recommendation: Investigate the source IP and review authentication logs.
 ----------------------------------------
-Alert type: Successful login after repeated failures
+Alert type: Successful Login After Repeated Failures
 Severity: HIGH
 Source IP: 192.168.1.10
 Related failed logins: 4
 Detection time: 2026-10-15 09:01:30
-Recommendation: Investigate the account and source IP, review nearby authentication events, and verify whether the login was legitimate.
+Recommendation: Verify whether the login was legitimate and investigate possible account compromise.
 ----------------------------------------
