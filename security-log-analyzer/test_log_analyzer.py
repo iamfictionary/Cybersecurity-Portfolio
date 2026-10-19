@@ -193,5 +193,28 @@ class TestSecurityLogAnalyzer(unittest.TestCase):
             or alerts == []
         )
 
+
+    def test_attack_from_one_ip_does_not_trigger_alert_for_another(self):
+        log = (
+            "2026-10-15 09:00:00 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:10 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:20 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:30 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:40 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:15 192.168.1.25 FAILED\n"
+            "2026-10-15 09:00:25 192.168.1.25 FAILED\n"
+        )
+        alerts = self.run_test_log(log)
+        self.assertTrue(
+            any(
+                alert["ip"] == "192.168.1.10"
+                and alert["severity"] == "HIGH"
+                for alert in alerts
+            )
+        )
+        self.assertFalse(
+            any(alert["ip"] == "192.168.1.25" for alert in alerts)
+        )
+
 if __name__ == "__main__":
     unittest.main()
