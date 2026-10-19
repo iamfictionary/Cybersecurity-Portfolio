@@ -173,5 +173,25 @@ class TestSecurityLogAnalyzer(unittest.TestCase):
 
         for alert in json_alerts:
             self.assertTrue(required_fields.issubset(alert.keys()))
+
+    def test_unexpected_status_is_ignored(self):
+        log = (
+            "2026-10-15 09:00:00 192.168.1.10 UNKNOWN\\n"
+        )
+        alerts = self.run_test_log(log)
+        self.assertEqual(alerts, [])
+
+
+    def test_incomplete_log_entry_is_ignored(self):
+        log = (
+            "2026-10-15 09:00:00 192.168.1.10 FAILED\\n"
+            "2026-10-15 09:00:15 192.168.1.10\\n"
+        )
+        alerts = self.run_test_log(log)
+        self.assertTrue(
+            all(alert["ip"] != "192.168.1.10" for alert in alerts)
+            or alerts == []
+        )
+
 if __name__ == "__main__":
     unittest.main()
