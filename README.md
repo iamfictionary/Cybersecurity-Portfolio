@@ -1,13 +1,11 @@
 # Cybersecurity Portfolio
 
-Welcome to my cybersecurity portfolio.
+A hands-on portfolio demonstrating practical cybersecurity skills, Python security automation, log analysis, and threat detection.
 
-I am an IT professional developing my practical skills in cybersecurity, security operations, and threat detection.
+## Technical Skills
 
-## Skills and Technologies
-
-- Security Operations (SOC)
-- Security Information and Event Management (SIEM)
+- Security Operations Center (SOC)
+- Security Information and Event Management (SIEM) concepts
 - Python for Security Automation
 - Log Analysis and Threat Detection
 - Incident Response
@@ -16,7 +14,42 @@ I am an IT professional developing my practical skills in cybersecurity, securit
 
 ## Projects
 
-My projects will demonstrate practical cybersecurity skills through hands-on exercises, security investigations, and automation tools.
+### Security Log Analyzer
+
+**Technologies:** Python, JSON, unittest
+
+A Python tool that analyzes authentication logs, detects suspicious login activity, and generates security alerts and reports.
+
+**Features**
+- Detects repeated failed logins within a rolling five-minute window.
+- Assigns MEDIUM and HIGH severity to detected scenarios.
+- Identifies successful logins following repeated failures.
+- Skips malformed log entries, invalid timestamps, and unexpected statuses.
+- Generates a human-readable security report.
+- Exports structured alerts to JSON.
+- Includes recommendations and MITRE ATT&CK mapping for brute-force activity.
+- Includes automated tests for detection logic and input validation.
+
+**Project files**
+- `log_analyzer.py` — detection and reporting logic.
+- `login.log` — sample authentication events.
+- `security_report.txt` — generated report.
+- `security_alerts.json` — structured alerts.
+- `test_log_analyzer.py` — automated tests.
+
+**Run the analyzer**
+
+```bash
+cd security-log-analyzer
+python3 log_analyzer.py
+
+**Run the tests**
+
+From the portfolio folder, run:
+
+`cd security-log-analyzer && python3 -m unittest -v test_log_analyzer.py`
+
+The test suite contains 14 tests covering alert severity, suspicious login patterns, malformed records, independent IP addresses, and JSON alert validation.
 
 ## Certifications
 
@@ -25,4 +58,4 @@ My projects will demonstrate practical cybersecurity skills through hands-on exe
 
 ## Career Goal
 
-My goal is to strengthen my technical expertise and build practical experience in Security Operations Center (SOC) analysis and incident response.
+To build practical expertise in Security Operations Center (SOC) analysis, threat detection, security automation, and incident response.
