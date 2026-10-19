@@ -91,5 +91,37 @@ class TestSecurityLogAnalyzer(unittest.TestCase):
         )
 
 
+    def test_three_failures_outside_five_minute_window_create_no_alert(self):
+        log = (
+            "2026-10-15 09:00:00 192.168.1.10 FAILED\n"
+            "2026-10-15 09:05:01 192.168.1.10 FAILED\n"
+            "2026-10-15 09:10:02 192.168.1.10 FAILED\n"
+        )
+
+        alerts = self.run_test_log(log)
+
+        self.assertEqual(alerts, [])
+
+    def test_failures_from_different_ips_are_counted_independently(self):
+        log = (
+            "2026-10-15 09:00:00 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:15 192.168.1.25 FAILED\n"
+            "2026-10-15 09:00:30 192.168.1.10 FAILED\n"
+            "2026-10-15 09:00:45 192.168.1.25 FAILED\n"
+        )
+
+        alerts = self.run_test_log(log)
+
+        self.assertEqual(alerts, [])
+    def test_malformed_log_entries_do_not_crash_analyzer(self):
+        log = (
+            "this is not a valid log entry\n"
+            "2026-10-15 09:00:00 192.168.1.10 FAILED\n"
+            "not-a-date 192.168.1.10 FAILED\n"
+        )
+
+        alerts = self.run_test_log(log)
+
+        self.assertEqual(alerts, [])
 if __name__ == "__main__":
     unittest.main()
