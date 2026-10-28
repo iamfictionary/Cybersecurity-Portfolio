@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-10-28T13:08:42.724813+00:00",
+  "note": "Training data only. Alerts and IP addresses are illustrative.",
+  "total_alerts": 5,
+  "alerts": [
+    {
+      "alert_id": "SOC-001",
+      "type": "multiple_failed_logins",
+      "severity": "HIGH",
+      "reason": "Repeated failed login attempts may indicate a brute-force attack.",
+      "recommendation": "Review authentication logs, verify the source IP, and check for a successful login."
+    },
+    {
+      "alert_id": "SOC-002",
+      "type": "malware_detected",
+      "severity": "CRITICAL",
+      "reason": "A malware detection may indicate a compromised system.",
+      "recommendation": "Follow incident response procedures and investigate or isolate the affected host according to policy."
+    },
+    {
+      "alert_id": "SOC-003",
+      "type": "unusual_outbound_traffic",
+      "severity": "MEDIUM",
+      "reason": "Unusual outbound traffic may indicate suspicious communication or data transfer.",
+      "recommendation": "Review destination, volume, timing, and endpoint activity to determine whether the traffic is expected."
+    },
+    {
+      "alert_id": "SOC-004",
+      "type": "policy_violation",
+      "severity": "LOW",
+      "reason": "An activity may have violated an internal security policy.",
+      "recommendation": "Review the event and applicable policy to determine whether further investigation is required."
+    },
+    {
+      "alert_id": "SOC-005",
+      "type": "unknown_event",
+      "severity": "UNCLASSIFIED",
+      "reason": "No triage rule exists for this alert type.",
+      "recommendation": "Review the alert manually and create an approved rule if appropriate."
+    }
+  ]
+}

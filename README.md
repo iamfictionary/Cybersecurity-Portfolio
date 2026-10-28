@@ -92,6 +92,23 @@ A Python security tool that uses SHA-256 hashes to identify changes to monitored
 
 **Limitation:** This is a learning project with manual checks, not a production or real-time monitoring system. The baseline must be protected against unauthorized modification.
 
+### SOC Alert Triage and Prioritization Tool
+
+A Python learning project that classifies sample security alerts by severity, explains why each alert matters, and recommends an appropriate next step.
+
+**Features**
+- Assigns severity levels to known alert types.
+- Flags unsupported alert types for manual review.
+- Provides investigation recommendations.
+- Generates a JSON triage report.
+- Includes seven automated unit tests.
+
+**Technologies:** Python, JSON, unittest.
+
+**Testing:** All seven automated tests pass.
+
+**Limitation:** Uses illustrative alerts and predefined rules. It does not connect to a live SIEM or perform automatic blocking.
+
 ## Certifications
 
 - ISC2 Certified in Cybersecurity (CC)
