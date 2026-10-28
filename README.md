@@ -50,7 +50,32 @@ From the portfolio folder, run:
 `cd security-log-analyzer && python3 -m unittest -v test_log_analyzer.py`
 
 The test suite contains 14 tests covering alert severity, suspicious login patterns, malformed records, independent IP addresses, and JSON alert validation.
+### Threat Intelligence IP Enrichment Tool
 
+**Technologies:** Python, JSON, unittest
+
+A Python tool that validates IP addresses, checks them against a local sample threat-intelligence database, classifies results by severity, and generates a JSON investigation report.
+
+**Features**
+- Validates IPv4 and IPv6 addresses.
+- Classifies sample records as HIGH, MEDIUM, or LOW severity.
+- Handles invalid and unknown IP addresses.
+- Provides investigation recommendations.
+- Exports results to `threat_report.json`.
+- Includes nine automated tests.
+
+**Important limitation:** The database uses simulated records and documentation-only IP addresses. It does not perform live threat-intelligence lookups, and confidence values are illustrative.
+
+**Run the tool**
+```bash
+cd threat-intel-enrichment
+python3 threat_intel.py
+```
+
+**Run the tests**
+```bash
+python3 -m unittest -v test_threat_intel.py
+```
 ## Certifications
 
 - ISC2 Certified in Cybersecurity (CC)

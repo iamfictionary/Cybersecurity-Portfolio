@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-10-28T11:52:08.687377+00:00",
+  "source": "Local sample threat-intelligence database",
+  "results": [
+    {
+      "ip": "192.0.2.10",
+      "severity": "HIGH",
+      "reputation": "malicious",
+      "threat_type": "Brute-force activity",
+      "confidence": 95,
+      "recommendation": "Investigate related events and consider blocking the IP according to your organization's procedures."
+    },
+    {
+      "ip": "198.51.100.25",
+      "severity": "MEDIUM",
+      "reputation": "suspicious",
+      "threat_type": "Repeated connection attempts",
+      "confidence": 65,
+      "recommendation": "Review related logs and gather additional evidence before taking action."
+    },
+    {
+      "ip": "203.0.113.50",
+      "severity": "LOW",
+      "reputation": "clean",
+      "threat_type": "No known threats in sample data",
+      "confidence": 10,
+      "recommendation": "No known threat in this sample database; continue normal monitoring."
+    },
+    {
+      "ip": "999.999.999.999",
+      "severity": "INVALID",
+      "reputation": "unknown",
+      "threat_type": "Invalid IP address",
+      "confidence": 0,
+      "recommendation": "Check the IP address format before investigating."
+    }
+  ]
+}
