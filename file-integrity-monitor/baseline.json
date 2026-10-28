@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-10-28T12:46:20.407809+00:00",
+  "directory": "/Users/Fictionary/Projects/Cybersecurity-Portfolio/file-integrity-monitor/test_files",
+  "files": {
+    "config.txt": "bc2cede63878b28c212fe1887a7a03c3e6e10380a8f991fd997434de69c000f7",
+    "users.txt": "e6711a6651543872a99babcb68f1c8cdd3e8dc9eed5a4b42fa571fb46c4d964c"
+  }
+}

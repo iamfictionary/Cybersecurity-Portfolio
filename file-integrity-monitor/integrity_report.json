@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-10-28T12:50:44.077459+00:00",
+  "directory": "/Users/Fictionary/Projects/Cybersecurity-Portfolio/file-integrity-monitor/test_files",
+  "total_files": 2,
+  "changes_detected": 3,
+  "changes": [
+    {
+      "file": "users.txt",
+      "status": "DELETED"
+    },
+    {
+      "file": "new_file.txt",
+      "status": "ADDED"
+    },
+    {
+      "file": "config.txt",
+      "status": "MODIFIED"
+    }
+  ]
+}

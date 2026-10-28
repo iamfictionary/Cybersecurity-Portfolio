@@ -76,6 +76,22 @@ python3 threat_intel.py
 ```bash
 python3 -m unittest -v test_threat_intel.py
 ```
+### File Integrity Monitoring Tool
+
+A Python security tool that uses SHA-256 hashes to identify changes to monitored files by comparing them against a saved baseline.
+
+**Features**
+- Creates a baseline of file hashes.
+- Detects added, modified, and deleted files.
+- Generates JSON integrity reports.
+- Includes six automated unit tests.
+
+**Technologies:** Python, SHA-256, JSON, unittest.
+
+**Testing:** All six automated tests pass.
+
+**Limitation:** This is a learning project with manual checks, not a production or real-time monitoring system. The baseline must be protected against unauthorized modification.
+
 ## Certifications
 
 - ISC2 Certified in Cybersecurity (CC)
