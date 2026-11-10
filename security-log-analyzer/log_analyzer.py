@@ -1,3 +1,4 @@
+
 from collections import Counter, defaultdict, deque
 from datetime import datetime, timedelta
 import json
@@ -56,18 +57,15 @@ def analyze_logins(filename):
                         "ip": ip_address,
                         "count": count,
                         "time": timestamp,
-                        "recommendation": (
-                            "Investigate the source IP and review "
-                            "authentication logs."
-                        ),
-
-                         "recommendation": (
+                        
+"recommendation": (
     "Investigate the source IP and review authentication logs."
 ),
 "mitre_attack": {
     "technique_id": "T1110",
     "technique_name": "Brute Force"
 },
+
 
 
 
